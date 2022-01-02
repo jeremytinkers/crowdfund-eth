@@ -1,5 +1,20 @@
 pragma solidity ^0.4.17;
 
+contract FactoryCampaign {
+    //maintains and deploys new campiagns on the fly and as a result we dont incur cost but its borne upon the caller
+
+    address[] public deployedCampaigns;
+
+    function createCampaign(uint InitialMinContribution) public{
+        address newCampaign = new Campaign(InitialMinContribution, msg.sender);
+        deployedCampaigns.push(newCampaign);
+    }
+
+    function getAllDeployedCampaigns() public returns(address[]) {
+        return deployedCampaigns;
+    }
+ }
+
 contract Campaign {
 
     struct SpendRequest {
@@ -18,8 +33,8 @@ contract Campaign {
     uint public noContributors;
     SpendRequest[] public requests;
 
-    function Campaign(uint InitialMinContribution) public{
-        manager = msg.sender;
+    function Campaign(uint InitialMinContribution, address campaignCreator) public{
+        manager = campaignCreator; //not msg.sender as that would be the transaction
         minContribution = InitialMinContribution;
 
     }
