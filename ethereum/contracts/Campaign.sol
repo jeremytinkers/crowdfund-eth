@@ -112,7 +112,5 @@ contract Campaign {
         );
     }
 
-    // function getRequestDetail(idx)
-
 
 }

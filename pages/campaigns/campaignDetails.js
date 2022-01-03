@@ -1,8 +1,10 @@
-import { Card } from "semantic-ui-react";
+import { Card, Grid, Button } from "semantic-ui-react";
+import Link from "next/link";
 import Campaign from "../../ethereum/build/Campaign.json";
 import React from "react";
 import web3 from "../../ethereum/web3";
 import Layout from "../../components/Layout";
+import ContributeSection from "../../components/contributeSection";
 
 let curCampaignAddress;
 
@@ -37,22 +39,23 @@ class campaignDetails extends React.Component {
       {
         header: manager,
         description: "Address of Manager (Creator of Campaign)",
-        style: {overflowWrap: "break-word"}
+        style: { overflowWrap: "break-word" },
       },
       {
         header: minContribution,
-        description: "The Minimum Contribution one has to make to enter campaign",
-        style: {overflowWrap: "break-word"}
+        description:
+          "The Minimum Contribution one has to make to enter campaign",
+        style: { overflowWrap: "break-word" },
       },
       {
         header: noContributors,
         description: "Total Number of Contributors to the campaign",
-        style: {overflowWrap: "break-word"}
+        style: { overflowWrap: "break-word" },
       },
       {
         header: noRequests,
         description: "Total Number of Spend Requests so far",
-        style: {overflowWrap: "break-word"}
+        style: { overflowWrap: "break-word" },
       },
     ];
 
@@ -62,7 +65,26 @@ class campaignDetails extends React.Component {
   render() {
     return (
       <Layout>
-        {this.renderDetails()}
+        <Grid>
+          <Grid.Column width={10}>
+            {this.renderDetails()}
+
+            <Link
+              as={`/requests/requestDetails/${curCampaignAddress}`}
+              href={{
+                pathname: `/requests/requestDetails/`,
+                query: { curCampaignAddress },
+              }}
+            >
+              <a>
+                <Button>View Spend Requests</Button>
+              </a>
+            </Link>
+          </Grid.Column>
+          <Grid.Column width={5}>
+            <ContributeSection address={curCampaignAddress} />
+          </Grid.Column>
+        </Grid>
       </Layout>
     );
   }
