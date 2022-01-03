@@ -10,7 +10,7 @@ contract FactoryCampaign {
         deployedCampaigns.push(newCampaign);
     }
 
-    function getAllDeployedCampaigns() public returns(address[]) {
+    function getAllDeployedCampaigns() public view returns(address[]) {
         return deployedCampaigns;
     }
  }
@@ -102,6 +102,17 @@ contract Campaign {
         }
     
     }
+
+    function getAllDetails() public view returns(address,uint, uint, uint){
+        return (
+            manager,
+            minContribution,
+            noContributors,
+            requests.length
+        );
+    }
+
+    // function getRequestDetail(idx)
 
 
 }
