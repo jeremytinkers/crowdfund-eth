@@ -42,7 +42,7 @@ class campaignDetails extends React.Component {
         style: { overflowWrap: "break-word" },
       },
       {
-        header: minContribution,
+        header: `${minContribution} wei`, 
         description:
           "The Minimum Contribution one has to make to enter campaign",
         style: { overflowWrap: "break-word" },

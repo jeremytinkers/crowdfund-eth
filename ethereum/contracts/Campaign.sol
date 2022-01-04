@@ -112,5 +112,9 @@ contract Campaign {
         );
     }
 
+    function getRequestsLength() public view returns(uint){
+        return requests.length;
+    }
+
 
 }
