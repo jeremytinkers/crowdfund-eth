@@ -4,7 +4,6 @@ import Campaign from "../../ethereum/build/Campaign.json";
 import React from "react";
 import web3 from "../../ethereum/web3";
 import Layout from "../../components/Layout";
-import ContributeSection from "../../components/contributeSection";
 import Router from "next/router";
 
 let curCampaignAddress;
@@ -27,6 +26,11 @@ class campaignDetails extends React.Component {
 
     let accounts = await web3.eth.getAccounts();
 
+    const noContributors = await campaignInstance.methods
+      .noContributors()
+      .call();
+
+      console.log(noContributors);
     const requestsSize = await campaignInstance.methods
       .getRequestsLength()
       .call();
@@ -42,6 +46,7 @@ class campaignDetails extends React.Component {
       campaignInstance,
       accounts,
       curManagerAddress,
+      noContributors,
     };
   }
   //handles submission of users votes
@@ -82,6 +87,7 @@ class campaignDetails extends React.Component {
 
   renderRequests() {
     //TODO? : ADD a fn in campaign.sol to tell us if a contributor has already voted for a particular request or no
+    console.log("renderrequest:" + this.props.noContributors);
     const items = this.props.requestSet.map((curRequest, index) => {
       return {
         header: curRequest.descp,
@@ -108,11 +114,20 @@ class campaignDetails extends React.Component {
                     Vote No
                   </Button>
                 </p>
-                {}
-                {this.props.curManagerAddress == this.props.accounts[0] ? (
-                  <Button secondary onClick={() => this.completeRequest(index)}>
-                    Transfer Vendor Funds
-                  </Button>
+
+                {this.props.noContributors == curRequest.yes + curRequest.no ? (
+                  <div>
+                    {this.props.curManagerAddress == this.props.accounts[0] ? (
+                      <Button
+                        secondary
+                        onClick={() => this.completeRequest(index)}
+                      >
+                        Transfer Vendor Funds
+                      </Button>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
                 ) : (
                   <></>
                 )}
