@@ -10,10 +10,9 @@ let curCampaignAddress;
 
 class campaignDetails extends React.Component {
   static async getInitialProps(props) {
-    curCampaignAddress = props.query.curCampaignAddress;
-    console.log(props.query.curCampaignAddress);
     //fn particular to next.js, runs on server side
-
+    curCampaignAddress = props.query.curCampaignAddress;
+    // console.log(props.query.curCampaignAddress);
     const campaignInstance = await new web3.eth.Contract(
       JSON.parse(Campaign.interface),
       curCampaignAddress
@@ -22,7 +21,7 @@ class campaignDetails extends React.Component {
     const campaignDetails = await campaignInstance.methods
       .getAllDetails()
       .call();
-    console.log(campaignDetails);
+    // console.log(campaignDetails);
 
     return {
       manager: campaignDetails[0],

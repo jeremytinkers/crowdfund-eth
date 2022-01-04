@@ -28,7 +28,7 @@ class RequestCreate extends Component {
     try {
       const accounts = await web3.eth.getAccounts();
 
-      console.log("ADD:" + curCampaignAddress);
+      // console.log("Cur address:" + curCampaignAddress);
       const campaignInstance = await new web3.eth.Contract(
         JSON.parse(Campaign.interface),
         curCampaignAddress
@@ -42,8 +42,8 @@ class RequestCreate extends Component {
         )
         .send({ from: accounts[0] });
 
-        Router.pushRoute("/");
-    //   Router.pushRoute(`/requests/requestDetails/${curCampaignInstance}`);
+      Router.pushRoute("/");
+      //   Router.pushRoute(`/requests/requestDetails/${curCampaignInstance}`);
     } catch (err) {
       this.setState({ errorMessage: err.message });
     }
@@ -80,7 +80,7 @@ class RequestCreate extends Component {
               }
             />
           </Form.Field>
-          <Message error header="Oops!" content={this.state.errorMessage} />          
+          <Message error header="Oops!" content={this.state.errorMessage} />
           <Button loading={this.state.loading} primary>
             Create Request!
           </Button>

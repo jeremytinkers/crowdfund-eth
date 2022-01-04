@@ -30,7 +30,7 @@ class campaignDetails extends React.Component {
       .noContributors()
       .call();
 
-      console.log(noContributors);
+    // console.log(noContributors);
     const requestsSize = await campaignInstance.methods
       .getRequestsLength()
       .call();
@@ -40,7 +40,7 @@ class campaignDetails extends React.Component {
       requestSet.push(tempReq);
     }
 
-    console.log(requestSet);
+    // console.log(requestSet);
     return {
       requestSet,
       campaignInstance,
@@ -51,8 +51,8 @@ class campaignDetails extends React.Component {
   }
   //handles submission of users votes
   submitVote = async (idx, vote) => {
-    console.log("submitvote!");
-    console.log(curCampaignAddress);
+    // console.log("submitvote!");
+    // console.log(curCampaignAddress);
 
     this.setState({ loading: true });
 
@@ -62,7 +62,7 @@ class campaignDetails extends React.Component {
         .send({ from: this.props.accounts[0] });
       Router.pushRoute("/");
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       this.setState({ errorMessage: error.message });
     }
     this.setState({ loading: false });
@@ -70,7 +70,7 @@ class campaignDetails extends React.Component {
 
   //transfer funds from campaign's wallet to Vendor
   completeRequest = async (idx) => {
-    console.log("completRequest");
+    // console.log("completRequest");
 
     this.setState({ loading: true });
     try {
@@ -79,7 +79,7 @@ class campaignDetails extends React.Component {
         .send({ from: this.props.accounts[0] });
       Router.pushRoute("/");
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
       this.setState({ errorMessage: error.message });
     }
     this.setState({ loading: false });
@@ -87,7 +87,7 @@ class campaignDetails extends React.Component {
 
   renderRequests() {
     //TODO? : ADD a fn in campaign.sol to tell us if a contributor has already voted for a particular request or no
-    console.log("renderrequest:" + this.props.noContributors);
+    // console.log("renderrequest:" + this.props.noContributors);
     const items = this.props.requestSet.map((curRequest, index) => {
       return {
         header: curRequest.descp,
