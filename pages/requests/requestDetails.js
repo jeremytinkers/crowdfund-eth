@@ -1,14 +1,19 @@
-import { Card, Grid, Button } from "semantic-ui-react";
+import { Card, Grid, Button, Message } from "semantic-ui-react";
 import Link from "next/link";
 import Campaign from "../../ethereum/build/Campaign.json";
 import React from "react";
 import web3 from "../../ethereum/web3";
 import Layout from "../../components/Layout";
 import ContributeSection from "../../components/contributeSection";
+import Router from "next/router";
 
 let curCampaignAddress;
 
 class campaignDetails extends React.Component {
+  state = {
+    errorMessage: "",
+    loading: false,
+  };
   static async getInitialProps(props) {
     let requestSet = [];
     curCampaignAddress = props.query.curCampaignAddress;
@@ -39,30 +44,40 @@ class campaignDetails extends React.Component {
       curManagerAddress,
     };
   }
-
+  //handles submission of users votes
   submitVote = async (idx, vote) => {
     console.log("submitvote!");
     console.log(curCampaignAddress);
+
+    this.setState({ loading: true });
 
     try {
       await this.props.campaignInstance.methods
         .voteRequest(idx, vote)
         .send({ from: this.props.accounts[0] });
+      Router.pushRoute("/");
     } catch (error) {
       console.log(error.message);
+      this.setState({ errorMessage: error.message });
     }
+    this.setState({ loading: false });
   };
 
+  //transfer funds from campaign's wallet to Vendor
   completeRequest = async (idx) => {
     console.log("completRequest");
 
+    this.setState({ loading: true });
     try {
       await this.props.campaignInstance.methods
         .completeRequest(idx)
         .send({ from: this.props.accounts[0] });
+      Router.pushRoute("/");
     } catch (error) {
       console.log(error.message);
+      this.setState({ errorMessage: error.message });
     }
+    this.setState({ loading: false });
   };
 
   renderRequests() {
@@ -83,15 +98,19 @@ class campaignDetails extends React.Component {
                 <p>Yes : {curRequest.yes}</p>
                 <p>No : {curRequest.no}</p>
                 <p>
-                  <Button onClick={() => this.submitVote(index, true)}>
+                  <Button positive onClick={() => this.submitVote(index, true)}>
                     Vote Yes
                   </Button>
-                  <Button onClick={() => this.submitVote(index, false)}>
+                  <Button
+                    negative
+                    onClick={() => this.submitVote(index, false)}
+                  >
                     Vote No
                   </Button>
                 </p>
+                {}
                 {this.props.curManagerAddress == this.props.accounts[0] ? (
-                  <Button primary onClick={() => this.completeRequest(index)}>
+                  <Button secondary onClick={() => this.completeRequest(index)}>
                     Transfer Vendor Funds
                   </Button>
                 ) : (
@@ -111,23 +130,54 @@ class campaignDetails extends React.Component {
   render() {
     return (
       <Layout>
-        <h1>This is request Details</h1>
+        <h1>List of Spend Requests:-</h1>
 
         <Grid>
-          <Grid.Column width={10}>
+          <Grid.Column width={6}>
             {this.renderRequests()}
+            {this.state.loading ? (
+              <div>
+                <br />
+                <Message
+                  header="Loading..."
+                  content={
+                    "Do hold on! You should be able to see your transaction get processed on Metamask as well."
+                  }
+                />
+              </div>
+            ) : (
+              <div>
+                <br />
+                {!!this.state.errorMessage ? (
+                  <Message
+                    error
+                    header="Oops!"
+                    content={this.state.errorMessage}
+                  />
+                ) : (
+                  <></>
+                )}
+              </div>
+            )}
 
-            <Link
-              as={`/requests/createRequest/${curCampaignAddress}`}
-              href={{
-                pathname: `/requests/createRequest/`,
-                query: { curCampaignAddress },
-              }}
-            >
-              <a>
-                <Button>Create a request</Button>
-              </a>
-            </Link>
+            <br />
+          </Grid.Column>
+          <Grid.Column width={5}>
+            {this.props.curManagerAddress == this.props.accounts[0] ? (
+              <Link
+                as={`/requests/createRequest/${curCampaignAddress}`}
+                href={{
+                  pathname: `/requests/createRequest/`,
+                  query: { curCampaignAddress },
+                }}
+              >
+                <a>
+                  <Button secondary>Create a request</Button>
+                </a>
+              </Link>
+            ) : (
+              <></>
+            )}
           </Grid.Column>
         </Grid>
       </Layout>

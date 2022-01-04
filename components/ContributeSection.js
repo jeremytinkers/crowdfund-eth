@@ -29,7 +29,7 @@ export default function ContributeSection(props) {
       await campaignInstance.methods
         .contribute()
         .send({ from: accounts[0], value: amt });
-      // Router.replacePath(`campaigns/`)
+        Router.pushRoute()
     } catch (error) {
       console.log(error.message);
       setErrorMsg(error.message);

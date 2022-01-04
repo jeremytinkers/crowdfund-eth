@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Form, Button, Input, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
-import fcInstance from "../../ethereum/factoryCampaign";
 import web3 from "../../ethereum/web3";
 import { Router } from "../../routes";
 import Campaign from "../../ethereum/build/Campaign.json";
@@ -81,7 +80,7 @@ class RequestCreate extends Component {
               }
             />
           </Form.Field>
-          <Message error header="Oops!" content={this.state.errorMessage} />
+          <Message error header="Oops!" content={this.state.errorMessage} />          
           <Button loading={this.state.loading} primary>
             Create Request!
           </Button>

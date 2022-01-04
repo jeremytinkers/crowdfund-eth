@@ -42,7 +42,7 @@ class campaignDetails extends React.Component {
         style: { overflowWrap: "break-word" },
       },
       {
-        header: `${minContribution} wei`, 
+        header: `${minContribution} wei`,
         description:
           "The Minimum Contribution one has to make to enter campaign",
         style: { overflowWrap: "break-word" },
@@ -65,10 +65,11 @@ class campaignDetails extends React.Component {
   render() {
     return (
       <Layout>
+        <br />
         <Grid>
           <Grid.Column width={10}>
             {this.renderDetails()}
-
+            <br />
             <Link
               as={`/requests/requestDetails/${curCampaignAddress}`}
               href={{
